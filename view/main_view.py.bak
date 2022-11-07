@@ -1,0 +1,33 @@
+import tkinter as tk
+
+import settings
+from view.qr_view import QRView
+
+
+class MainView:
+    def __init__(self, event_channel):
+        self.event_channel = event_channel
+        self.root = tk.Tk()
+        self.frame = tk.Frame(self.root)
+        self.root.geometry(self.calculate_screen_size())
+        self.root.configure(bg='#000')
+        # self.root.wm_attributes('-type', 'splash')
+        self._frame = None
+        self.switch_frame(QRView)
+        # self.root.attributes('-fullscreen', True)
+        # self.root.resizable(False, False)
+
+    def switch_frame(self, frame_class):
+        new_frame = frame_class(self.root, self.event_channel)
+        if self._frame is not None:
+            self._frame.destroy()
+        self._frame = new_frame
+        self._frame.pack()
+
+    def calculate_screen_size(self):
+        if settings.FULLSCREEN:
+            screen_width = self.root.winfo_screenwidth()
+            screen_height = self.root.winfo_screenheight()
+            return str(screen_width) + 'x' + str(screen_height)
+        else:
+            return '400x400'

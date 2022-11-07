@@ -4,7 +4,8 @@ from Controller.maincontroller import MainController
 
 
 async def main():
-    MainController()
+    app = MainController()
+    await app.exec()
     pass
 
 

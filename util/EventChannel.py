@@ -25,6 +25,7 @@ class EventChannel(object):
             self.subscribers[event].append(callback)
 
     def publish(self, event, args):
+        print(event)
         if event in self.subscribers.keys():
             for callback in self.subscribers[event]:
                 callback(args)

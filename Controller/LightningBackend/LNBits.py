@@ -17,11 +17,10 @@ def with_urllib3(url, headers):
 
 class LNBits:
     def __init__(self):
-        pass
         self.base_url = settings.LNBITS_ENDPOINT
         self.invoice_key = settings.LNBITS_INVOICE_KEY
 
-    def generate_invoice(self):
+    def generate_invoice(self, callback):
         endpoint = '/api/v1/payments'
 
         response = requests.post(self.base_url + endpoint,
@@ -30,7 +29,7 @@ class LNBits:
                                  headers={
                                      "X-Api-Key": self.invoice_key
                                  })
-        print(response.json()['payment_request'])
+        callback(response.json()['payment_request'])
 
     async def check_payment(self, callback):
         headers = {'Accept': 'text/event-stream', 'x-api-key': self.invoice_key}
