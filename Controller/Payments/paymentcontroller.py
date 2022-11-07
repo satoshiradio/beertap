@@ -16,13 +16,11 @@ class PaymentController:
         self.lightning_backend = lightning_backend_class()
         self.check_payments()
 
-
     def check_payments(self):
-        print('check')
         self.loop.create_task(self.lightning_backend.check_payment(self._on_payment))
 
     def _on_payment(self, payment_hash: str):
-        self.event_channel.publish('payment', payment_hash)
+        self.event_channel.publish('PAYMENT', payment_hash)
         self.generate_invoice()
 
     def _on_invoice(self, payment_hash: str):
