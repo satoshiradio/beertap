@@ -1,4 +1,7 @@
 import asyncio
+import os
+import time
+import tkinter
 import tkinter as tk
 import qrcode
 from PIL import ImageTk, Image
@@ -18,8 +21,7 @@ class QRView(tk.Frame):
         self.event_channel.subscribe('PAYMENT', self._on_payment)
 
     def _on_payment(self, invoice):
-        paid_label = tk.Label(self.root, text="PAID")
-        paid_label.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        self.draw_paid()
 
     def update_qr(self, invoice):
         self.generate_qr(invoice)
@@ -33,9 +35,17 @@ class QRView(tk.Frame):
         qr.add_data(invoice)
         qr.make(fit=True)
         qr_image = qr.make_image()
-        qr_size = round(self.height * 0.8)
-        qr_image = qr_image.resize((qr_size, qr_size), Image.ANTIALIAS)
-        qr_image_element = ImageTk.PhotoImage(qr_image)
-        self.canvas.create_image(self.width / 2, self.height / 2, anchor=tk.CENTER, image=qr_image_element)
-        self.canvas.image = qr_image_element
+        self._draw_image(qr_image)
+
+    def draw_paid(self):
+        image_open = Image.open(os.getcwd() + "/assets/paid.png")
+        self._draw_image(image_open)
+        time.sleep(10)
+
+    def _draw_image(self, image):
+        image_size = round(self.height * 0.8)
+        image = image.resize((image_size, image_size), Image.ANTIALIAS)
+        photo_image = ImageTk.PhotoImage(image)
+        self.canvas.create_image(self.width / 2, self.height / 2, anchor=tk.CENTER, image=photo_image)
+        self.canvas.image = photo_image
         self.update()
