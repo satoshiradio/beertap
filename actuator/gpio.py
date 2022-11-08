@@ -22,6 +22,6 @@ class GPIOActuator:
     def pour(self):
         self.pin.on()
         print("GPIO HIGH")
-        time.sleep(1)
+        time.sleep(10)
         self.pin.off()
         print("GPIO LOW")
