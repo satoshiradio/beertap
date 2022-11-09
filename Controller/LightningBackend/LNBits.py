@@ -21,10 +21,12 @@ class LNBits:
         self.invoice_key = settings.LNBITS_INVOICE_KEY
 
     def generate_invoice(self, callback):
+        sats = requests.get(settings.LNURL_URL).json()['minSendable']
+
         endpoint = '/api/v1/payments'
 
         response = requests.post(self.base_url + endpoint,
-                                 json={"out": False, "amount": 100, "memo": 'LNBeerTAP', "unit": 'sats',
+                                 json={"out": False, "amount": round(sats/10), "memo": 'LNBeerTAP', "unit": 'sats',
                                        "internal": False},
                                  headers={
                                      "X-Api-Key": self.invoice_key

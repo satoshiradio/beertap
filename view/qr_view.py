@@ -1,8 +1,6 @@
-import asyncio
 import os
-import time
-import tkinter
 import tkinter as tk
+
 import qrcode
 from PIL import ImageTk, Image
 
@@ -40,7 +38,6 @@ class QRView(tk.Frame):
     def draw_paid(self):
         image_open = Image.open(os.getcwd() + "/assets/paid.png")
         self._draw_image(image_open)
-        time.sleep(10)
 
     def _draw_image(self, image):
         image_size = round(self.height * 0.8)
