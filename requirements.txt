@@ -7,3 +7,4 @@ gpiozero~=1.6.2
 qrcode~=7.3.1
 Pillow~=9.3.0
 lnurl~=0.3.6
+aiohttp~=3.8.3

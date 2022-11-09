@@ -1,5 +1,3 @@
-import importlib
-
 from environs import Env
 
 env = Env()

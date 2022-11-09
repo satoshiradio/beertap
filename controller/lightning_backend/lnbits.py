@@ -1,5 +1,4 @@
 import json
-from abc import ABC
 
 import aiohttp as aiohttp
 import sseclient
@@ -18,6 +17,8 @@ def with_urllib3(url, headers):
 
 
 class LNBits(LightningBackendInterface):
+
+
     def __init__(self):
         self.base_url = settings.LNBITS_ENDPOINT
         self.invoice_key = settings.LNBITS_INVOICE_KEY
@@ -51,3 +52,9 @@ class LNBits(LightningBackendInterface):
         async with aiohttp.ClientSession() as session:
             async with session.post(self.base_url + endpoint, json=data, headers=headers) as response:
                 return await response.json()
+
+    async def get_price_in_sats(self) -> int:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(settings.LNURL_URL) as response:
+                res = await response.json()
+            return round(res['minSendable']/10)
