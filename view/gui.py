@@ -1,20 +1,14 @@
-import asyncio
-import tkinter as tk
-
 import settings
 from view.qr_view import QRView
 
 
-class Window:
-    def __init__(self, loop, event_channel):
-        self.loop = loop
-        self.root = tk.Tk()
+class GUI:
+    def __init__(self, root, event_channel):
         self.event_channel = event_channel
+        self.root = root
         self.set_screen_size()
-        self.root.configure(bg='#000')
         self._frame = None
         self.switch_frame(QRView)
-        self.root.resizable(False, False)
 
     def switch_frame(self, frame_class) -> None:
         new_frame = frame_class(self.root, self.event_channel)
@@ -24,6 +18,7 @@ class Window:
         self._frame.pack()
 
     def set_screen_size(self) -> None:
+        self.root.resizable(False, False)
         if settings.FULLSCREEN:
             screen_width = self.root.winfo_screenwidth()
             screen_height = self.root.winfo_screenheight()
@@ -32,8 +27,3 @@ class Window:
             self.root.attributes('-fullscreen', True)
         else:
             self.root.geometry('800x480')
-
-    async def show(self) -> None:
-        while True:
-            self.root.update()
-            await asyncio.sleep(.1)

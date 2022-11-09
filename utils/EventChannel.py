@@ -1,4 +1,4 @@
-import threading
+import asyncio
 
 
 class EventChannel(object):
@@ -27,9 +27,9 @@ class EventChannel(object):
         else:
             self.subscribers[event].append(callback)
 
-    def publish(self, event, args):
+    async def publish(self, event, args):
         print(event)
         if event in self.subscribers.keys():
-            for callback in self.subscribers[event]:
-                callback(args)
+            callbacks = self.subscribers[event]
+            await asyncio.gather(*[callback(args) for callback in callbacks])
 

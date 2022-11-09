@@ -1,9 +1,9 @@
-import time
-
-import settings
+import asyncio
 
 from gpiozero import LED, Device
 from gpiozero.pins.mock import MockFactory
+
+import settings
 
 
 class GPIOActuator:
@@ -16,12 +16,12 @@ class GPIOActuator:
         self.event_channel.subscribe('PAYMENT', self._on_payment)
         pass
 
-    def _on_payment(self, hash):
-        self.pour()
+    async def _on_payment(self, hash):
+        await self.pour()
 
-    def pour(self):
+    async def pour(self):
         self.pin.on()
         print("GPIO HIGH")
-        time.sleep(10)
+        await asyncio.sleep(10)
         self.pin.off()
         print("GPIO LOW")
