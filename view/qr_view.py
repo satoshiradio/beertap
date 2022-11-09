@@ -4,6 +4,8 @@ import tkinter as tk
 import qrcode
 from PIL import ImageTk, Image
 
+from model.invoice import Invoice
+
 
 class QRView(tk.Frame):
     def __init__(self, root: tk.Tk, event_channel):
@@ -18,19 +20,18 @@ class QRView(tk.Frame):
         self.event_channel.subscribe('INVOICE', self.update_qr)
         self.event_channel.subscribe('PAYMENT', self._on_payment)
 
-    def _on_payment(self, invoice):
+    async def _on_payment(self, invoice):
         self.draw_paid()
 
-    def update_qr(self, invoice):
+    async def update_qr(self, invoice):
         self.generate_qr(invoice)
-        print(invoice)
         pass
 
-    def generate_qr(self, invoice):
+    def generate_qr(self, invoice: Invoice):
         qr = qrcode.QRCode(
             error_correction=qrcode.constants.ERROR_CORRECT_L
         )
-        qr.add_data(invoice)
+        qr.add_data(invoice.payment_request)
         qr.make(fit=True)
         qr_image = qr.make_image()
         self._draw_image(qr_image)
@@ -38,6 +39,7 @@ class QRView(tk.Frame):
     def draw_paid(self):
         image_open = Image.open(os.getcwd() + "/assets/paid.png")
         self._draw_image(image_open)
+        return
 
     def _draw_image(self, image):
         image_size = round(self.height * 0.8)
@@ -46,3 +48,4 @@ class QRView(tk.Frame):
         self.canvas.create_image(self.width / 2, self.height / 2, anchor=tk.CENTER, image=photo_image)
         self.canvas.image = photo_image
         self.update()
+        return

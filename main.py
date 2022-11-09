@@ -1,15 +1,34 @@
 import asyncio
+from tkinter import *
+from functools import wraps
 
-from Controller.maincontroller import MainController
+from app import App
+from view.gui import GUI
+
+
+async def run_tk(root, interval=0.05):
+    '''
+    Run a tkinter app in an asyncio event loop.
+    '''
+    try:
+        while True:
+            root.update()
+            await asyncio.sleep(interval)
+    except TclError as e:
+        if "application has been destroyed" not in e.args[0]:
+            raise
 
 
 async def main():
-    app = MainController()
-    await app.exec()
-    pass
+    app = App()
+    root = Tk()
+    gui = GUI(root, app.event_channel)
+
+    asyncio.ensure_future(app.exec())
+    await run_tk(root)
+
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    asyncio.get_event_loop().run_until_complete(main())
+    # asyncio.run(main())
