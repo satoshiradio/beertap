@@ -12,3 +12,7 @@ class LightningBackendInterface(ABC):
     @abstractmethod
     async def check_for_payments(self, callback):
         raise NotImplementedError
+
+    @abstractmethod
+    async def get_price_in_sats(self) -> int:
+        raise NotImplementedError
