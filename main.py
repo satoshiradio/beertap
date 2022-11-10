@@ -7,9 +7,9 @@ from view.gui import GUI
 
 
 async def run_tk(root, interval=0.05):
-    '''
+    """
     Run a tkinter app in an asyncio event loop.
-    '''
+    """
     try:
         while True:
             root.update()
@@ -23,10 +23,8 @@ async def main():
     app = App()
     root = Tk()
     gui = GUI(root, app.event_channel)
-
     asyncio.ensure_future(app.exec())
     await run_tk(root)
-
 
 
 if __name__ == '__main__':
