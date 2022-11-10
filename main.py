@@ -19,14 +19,13 @@ async def run_tk(root, interval=0.05):
             raise
 
 
-async def main():
+async def main() -> None:
     app = App()
     root = Tk()
-    gui = GUI(root, app.event_channel)
+    GUI(root, app.event_channel)
     asyncio.ensure_future(app.exec())
     await run_tk(root)
 
 
 if __name__ == '__main__':
     asyncio.get_event_loop().run_until_complete(main())
-    # asyncio.run(main())

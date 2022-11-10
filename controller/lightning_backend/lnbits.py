@@ -47,7 +47,7 @@ class LNBits(LightningBackendInterface):
                 # print(e)
                 pass
 
-    async def _post(self, endpoint, data, headers):
+    async def _post(self, endpoint, data, headers) -> any:
         async with aiohttp.ClientSession() as session:
             async with session.post(self.base_url + endpoint, json=data, headers=headers) as response:
                 return await response.json()

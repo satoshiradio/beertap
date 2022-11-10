@@ -5,7 +5,7 @@ class EventChannel(object):
     def __init__(self):
         self.subscribers = {}
 
-    def unsubscribe(self, event, callback):
+    def unsubscribe(self, event, callback) -> None:
         if event is not None or event != ""\
                 and event in self.subscribers.keys():
             self.subscribers[event] = list(
@@ -15,7 +15,7 @@ class EventChannel(object):
                 )
             )
 
-    def subscribe(self, event, callback):
+    def subscribe(self, event, callback) -> None:
         if not callable(callback):
             raise ValueError("callback must be callable")
 
@@ -27,7 +27,7 @@ class EventChannel(object):
         else:
             self.subscribers[event].append(callback)
 
-    async def publish(self, event, args):
+    async def publish(self, event, args) -> None:
         print(event)
         if event in self.subscribers.keys():
             callbacks = self.subscribers[event]
