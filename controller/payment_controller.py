@@ -27,5 +27,5 @@ class PaymentController:
         await self.event_channel.publish('INVOICE', invoice)
 
     async def generate_invoice(self):
-        price: int = await self.lightning_backend.get_price_in_sats()
+        price: int = await self.lightning_backend.get_price_in_sats(settings.PRICE_IN_EUROCENTS/100)
         await self._on_invoice(await self.lightning_backend.get_invoice(price))

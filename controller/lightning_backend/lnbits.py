@@ -18,19 +18,18 @@ def with_urllib3(url, headers):
 
 class LNBits(LightningBackendInterface):
 
-
     def __init__(self):
-        self.base_url = settings.LNBITS_ENDPOINT
+        self.base_url = settings.LNBITS_BASE_URL
         self.invoice_key = settings.LNBITS_INVOICE_KEY
 
     async def get_invoice(self, price: int) -> Invoice:
         endpoint = '/api/v1/payments'
-        data = {"out": False, "amount": price, "memo": 'LNBeerTAP', "unit": 'sats',
+        data = {"out": False, "amount": price, "memo": 'LNBeerTAP', "unit": 'sat',
                 "internal": False}
         headers = {
             'X-Api-Key': self.invoice_key
         }
-        data = await self._get_invoice(endpoint, data, headers)
+        data = await self._post(endpoint, data, headers)
         return Invoice(**data)
 
     async def check_for_payments(self, callback):
@@ -48,13 +47,18 @@ class LNBits(LightningBackendInterface):
                 # print(e)
                 pass
 
-    async def _get_invoice(self, endpoint, data, headers):
+    async def _post(self, endpoint, data, headers):
         async with aiohttp.ClientSession() as session:
             async with session.post(self.base_url + endpoint, json=data, headers=headers) as response:
                 return await response.json()
 
-    async def get_price_in_sats(self) -> int:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(settings.LNURL_URL) as response:
-                res = await response.json()
-            return round(res['minSendable']/10)
+    async def get_price_in_sats(self, price) -> int:
+        endpoint = 'api/v1/conversion'
+        data = {
+              "from": "eur",
+              "amount": price,
+              "to": "sat"
+            }
+        headers = {}
+        data = await self._post(endpoint, data, headers)
+        return data['sats']

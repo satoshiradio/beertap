@@ -14,5 +14,5 @@ class LightningBackendInterface(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_price_in_sats(self) -> int:
+    async def get_price_in_sats(self, price) -> int:
         raise NotImplementedError
