@@ -2,7 +2,7 @@ from nfc import ContactlessFrontend
 from nfc.clf import RemoteTarget
 from nfc.tag import Tag
 from lnurl import Lnurl
-from ndef import Record, UriRecord
+from ndef import Record, UriRecord, TextRecord
 
 class NfcController:
     def __init__(self, event_channel):
@@ -56,6 +56,18 @@ class NfcController:
         if isinstance(record, UriRecord):
             ur: UriRecord = record
             return self.extract_lnurl_from_string(ur.iri)
+        
+        if isinstance(record, TextRecord):
+            tr: TextRecord = record
+            return self.extract_lnurl_from_string(tr.text)
+
+        try:
+            yolo = record.data.decode('utf-8')
+            return self.extract_lnurl_from_string(yolo)
+        except:
+            pass
+
+        return None
 
     def extract_lnurl_from_string(self, str: str):
         if str is None:
