@@ -1,5 +1,6 @@
 import requests
 from utils.EventChannel import EventChannel
+from model.invoice import Invoice
 
 class LnurlwController:
     def __init__(self, event_channel: EventChannel) -> None:
@@ -7,7 +8,7 @@ class LnurlwController:
         event_channel.subscribe('INVOICE', self.on_invoice)
         event_channel.subscribe('LNURLW', self.on_lnurlw)
 
-    def on_invoice(self, invoice: str):
+    def on_invoice(self, invoice: Invoice):
         self.invoice = invoice
     
     def on_lnurlw(self, lnurlw: str):
@@ -33,7 +34,7 @@ class LnurlwController:
             if callback.find('?') > 0:
                 sep = '&'
             
-            url = callback + sep + 'k1=' + k1 + "&pr=" + self.invoice
+            url = callback + sep + 'k1=' + k1 + "&pr=" + self.invoice.payment_request
             print('sending lnurlw get request 1 to:', url)
             resp2 = requests.get(url)
             json2 = resp2.json()
