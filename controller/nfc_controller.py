@@ -11,6 +11,7 @@ class NfcController:
 
     def listen(self):
         # TODO: Figure out how to get the path
+        self.stopped = False
         with ContactlessFrontend('usb') as clf:
             while self.stopped == False:
                 print("NfcController.listen: start connecting to NFC.")
@@ -20,27 +21,27 @@ class NfcController:
                     'on-release': self.on_release,
                     'beep-on-connect': True,
                 })
-                print("NfcController.listen: done connecting to NFC. has connected: ", has_connected)
+                print("NfcController.listen: done connecting to NFC. has connected:", has_connected)
 
     def stop_listening(self):
         self.stopped = True
 
     def on_discover(self, target: RemoteTarget):
-        print("NfcController.on_discover: ", target)
+        print("NfcController.on_discover:", target)
         return True
 
     def on_connect(self, tag: Tag):
-        print("NfcController.on_connect: ", tag)
+        print("NfcController.on_connect:", tag)
 
         if tag.ndef is None:
-            print("Tag is not NDEF.")
+            print("NfcController.on_connect: Tag is not NDEF.")
             return True
 
         records: list[Record] = tag.ndef.records
         for record in records:
-            lnurl = self.extract_lnurl(record)
+            lnurl = self.extract_lnurl_from_record(record)
             if lnurl is not None:
-                print("NfcController.on_connect: lnurl found: ", lnurl)
+                print("NfcController.on_connect: lnurl found:", lnurl)
                 self.event_channel.publish('LNURLW', lnurl)
                 return True
 
@@ -99,4 +100,3 @@ class NfcController:
             pass
         
         return None
-
