@@ -3,10 +3,13 @@ from nfc.clf import RemoteTarget
 from nfc.tag import Tag
 from lnurl import Lnurl
 from ndef import Record, UriRecord, TextRecord
+from utils.EventChannel import EventChannel
+from controller.lnurlw_controller import LnurlwController
 
 class NfcController:
-    def __init__(self, event_channel):
+    def __init__(self, event_channel: EventChannel,  lnurlw_controller: LnurlwController):
         self.event_channel = event_channel
+        self.lnurlw_controller = lnurlw_controller
         self.stopped = True
 
     def listen(self):
@@ -42,7 +45,7 @@ class NfcController:
             lnurl = self.extract_lnurl_from_record(record)
             if lnurl is not None:
                 print("NfcController.on_connect: lnurl found:", lnurl)
-                self.event_channel.publish('LNURLW', lnurl)
+                self.lnurlw_controller.on_lnurlw(lnurl)
                 return True
 
         print("NfcController.on_connect: No lnurl found.")
