@@ -1,4 +1,5 @@
 import asyncio
+from time import perf_counter
 
 from gpiozero import LED, Device
 from gpiozero.pins.mock import MockFactory
@@ -7,7 +8,7 @@ import settings
 
 
 def calculate_poor_time_in_seconds() -> int:
-    return (60/settings.MILLILITER_PER_HOUR*settings.MILLILITER_PER_GLASS*60)+settings.TAP_TIME_ADJUSTMENT_SECONDS
+    return settings.TAP_TIME
 
 
 class GPIOActuator:
@@ -21,6 +22,7 @@ class GPIOActuator:
         pass
 
     async def _on_payment(self, hash) -> None:
+        await asyncio.sleep(settings.DELAY_AFTER_PAYMENT)
         await self.pour()
 
     async def pour(self) -> None:

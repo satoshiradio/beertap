@@ -26,4 +26,4 @@ class GUI:
             self.root.wm_attributes('-type', 'splash')
             self.root.attributes('-fullscreen', True)
         else:
-            self.root.geometry('800x480')
+            self.root.geometry('800x600')
