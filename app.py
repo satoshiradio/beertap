@@ -10,8 +10,8 @@ class App:
         self.event_channel = EventChannel()
         self.paymentController = PaymentController(self.event_channel)
         self.actuator = GPIOActuator(self.event_channel)
-        self.nfcController = NfcController(self.event_channel)
         self.lnurlwController = LnurlwController(self.event_channel)
+        self.nfcController = NfcController(self.event_channel, self.lnurlwController)
 
     async def exec(self):
         await self.paymentController.generate_invoice()

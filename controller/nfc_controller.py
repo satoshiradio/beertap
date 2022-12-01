@@ -7,7 +7,7 @@ from utils.EventChannel import EventChannel
 from controller.lnurlw_controller import LnurlwController
 
 class NfcController:
-    def __init__(self, event_channel: EventChannel,  lnurlw_controller: LnurlwController):
+    def __init__(self, event_channel: EventChannel, lnurlw_controller: LnurlwController):
         self.event_channel = event_channel
         self.lnurlw_controller = lnurlw_controller
         self.stopped = True
