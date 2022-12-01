@@ -6,13 +6,14 @@ class LnurlwController:
         self.event_channel = event_channel
         event_channel.subscribe('INVOICE', self.on_invoice)
         event_channel.subscribe('LNURLW', self.on_lnurlw)
-    
+
     def on_invoice(self, invoice: str):
         self.invoice = invoice
     
     def on_lnurlw(self, lnurlw: str):
         print('LnurlwController.on_lnurlw')
         try:
+            print('sending lnurlw get request 1 to:', lnurlw)
             resp1 = requests.get(lnurlw)
             json1 = resp1.json()
             print('LnurlwController.on_lnurlw: got response1:', json1)
@@ -33,6 +34,7 @@ class LnurlwController:
                 sep = '&'
             
             url = callback + sep + 'k1=' + k1 + "&pr=" + self.invoice
+            print('sending lnurlw get request 1 to:', url)
             resp2 = requests.get(url)
             json2 = resp2.json()
             print('LnurlwController.on_lnurlw: got response2:', json2)
