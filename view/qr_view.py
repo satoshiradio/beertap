@@ -13,6 +13,7 @@ class QRView(tk.Frame):
         self.label = None
         self.root = root
         self.root.config(bg="white")
+
         self.root.update()
         self.height = self.root.winfo_height()
         self.width = self.root.winfo_width()
