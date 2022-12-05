@@ -23,7 +23,7 @@ class LNBits(LightningBackendInterface):
         self.invoice_key = settings.LNBITS_INVOICE_KEY
 
     async def get_invoice(self, price: int) -> Invoice:
-        endpoint = '/api/v1/payments'
+        endpoint = 'api/v1/payments'
         data = {"out": False, "amount": price, "memo": 'LNBeerTAP', "unit": 'sat',
                 "internal": False}
         headers = {

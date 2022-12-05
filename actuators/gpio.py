@@ -1,7 +1,7 @@
 import asyncio
 from time import perf_counter
 
-from gpiozero import LED, Device
+from gpiozero import LED, Device, OutputDevice
 from gpiozero.pins.mock import MockFactory
 
 import settings
@@ -16,7 +16,7 @@ class GPIOActuator:
         if settings.EMULATE_GPIO:
             Device.pin_factory = MockFactory()
 
-        self.pin = LED(settings.GPIO_TAP_PIN)
+        self.pin = OutputDevice(settings.GPIO_TAP_PIN, active_high=True, initial_value=False)
         self.event_channel = event_channel
         self.event_channel.subscribe('PAYMENT', self._on_payment)
         pass
@@ -31,5 +31,3 @@ class GPIOActuator:
         await asyncio.sleep(calculate_poor_time_in_seconds())
         self.pin.off()
         print("GPIO LOW")
-
-
