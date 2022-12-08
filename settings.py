@@ -17,3 +17,9 @@ PRICE_IN_EUROCENTS = env.int("PRICE_IN_EUROCENTS")
 
 LNBITS_BASE_URL = env.str("LNBITS_BASE_URL")
 LNBITS_INVOICE_KEY = env.str("LNBITS_INVOICE_KEY")
+
+NFC_PATH = env.str("NFC_PATH")
+NFC_TARGETS = [
+    x.strip(" ") for x in env.list("NFC_TARGETS", default=['106A', '106B', '212F'], subcast=str)
+]
+
