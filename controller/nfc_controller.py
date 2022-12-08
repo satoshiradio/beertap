@@ -1,3 +1,4 @@
+import time
 from nfc import ContactlessFrontend
 from nfc.clf import RemoteTarget
 from nfc.tag import Tag
@@ -27,6 +28,8 @@ class NfcController:
                 })
 
                 print("NfcController.listen: done connecting to NFC. has connected:", has_connected)
+                print("Sleeping 60 seconds to avoid burning cpu on failure.")
+                time.sleep(60)
 
     def stop_listening(self):
         self.stopped = True
