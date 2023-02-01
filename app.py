@@ -17,4 +17,4 @@ class App:
     async def exec(self):
         await self.paymentController.generate_invoice()
         self.paymentController.check_payments()
-        threading.Thread(target=self.nfcController.listen()).start()
+        threading.Thread(target=self.nfcController.listen).start()
