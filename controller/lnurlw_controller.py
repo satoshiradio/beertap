@@ -8,7 +8,7 @@ class LnurlwController:
         event_channel.subscribe('INVOICE', self.on_invoice)
         event_channel.subscribe('LNURLW', self.on_lnurlw)
 
-    def on_invoice(self, invoice: Invoice):
+    async def on_invoice(self, invoice: Invoice):
         self.invoice = invoice
     
     def on_lnurlw(self, lnurlw: str):

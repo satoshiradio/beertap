@@ -1,4 +1,5 @@
-import asyncio 
+import asyncio
+import threading
 from actuators.gpio import GPIOActuator
 from controller.payment_controller import PaymentController
 from controller.nfc_controller import NfcController
@@ -16,4 +17,4 @@ class App:
     async def exec(self):
         await self.paymentController.generate_invoice()
         self.paymentController.check_payments()
-        asyncio.get_event_loop().create_task(self.nfcController.listen())
+        threading.Thread(target=self.nfcController.listen()).start()

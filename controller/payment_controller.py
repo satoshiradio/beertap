@@ -17,7 +17,7 @@ class PaymentController:
         self.lightning_backend: LightningBackendInterface = lightning_backend_class()
 
     def check_payments(self) -> None:
-        asyncio.get_event_loop().create_task(self.lightning_backend.check_for_payments(self._on_payment))
+        self.lightning_backend.check_for_payments(self._on_payment)
 
     async def _on_payment(self, payment_hash: str) -> None:
         await self.event_channel.publish('PAYMENT', payment_hash)
