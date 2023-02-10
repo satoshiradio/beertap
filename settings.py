@@ -24,3 +24,6 @@ NFC_TARGETS = [
     x.strip(" ") for x in env.list("NFC_TARGETS", default=['106A', '106B', '212F'], subcast=str)
 ]
 
+TELEGRAM_ENABLED = env.bool("TELEGRAM_ENABLED", default=False)
+TELEGRAM_TOKEN = env.str("TELEGRAM_TOKEN")
+TELEGRAM_CHAT = env.int("TELEGRAM_CHAT")
