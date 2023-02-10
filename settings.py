@@ -3,7 +3,7 @@ from environs import Env
 env = Env()
 env.read_env()
 
-DEBUG = env.bool("DEBUG", default=False)
+LOGLEVEL = env.str("LOGLEVEL", default="Warning")
 FULLSCREEN = env.bool("FULLSCREEN", default=True)
 
 EMULATE_GPIO = env.bool("EMULATE_GPIO", default=False)

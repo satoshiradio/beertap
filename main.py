@@ -1,7 +1,10 @@
 import asyncio
 from tkinter import *
 from functools import wraps
+import logging
+import os
 
+import settings
 from app import App
 from view.gui import GUI
 
@@ -20,6 +23,11 @@ async def run_tk(root, interval=0.05):
 
 
 async def main() -> None:
+    logging.basicConfig(
+        level=settings.LOGLEVEL,
+        format="%(asctime)s %(module)s %(levelname)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
     app = App()
     root = Tk()
     GUI(root, app.event_channel)

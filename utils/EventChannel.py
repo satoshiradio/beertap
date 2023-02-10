@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 
 class EventChannel(object):
@@ -28,7 +29,7 @@ class EventChannel(object):
             self.subscribers[event].append(callback)
 
     async def publish(self, event, args) -> None:
-        print(event)
+        logging.info(event)
         if event in self.subscribers.keys():
             callbacks = self.subscribers[event]
             await asyncio.gather(*[callback(args) for callback in callbacks])

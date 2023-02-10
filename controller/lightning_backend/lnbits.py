@@ -1,4 +1,5 @@
 import json
+import logging
 
 import aiohttp as aiohttp
 import sseclient
@@ -34,17 +35,20 @@ class LNBits(LightningBackendInterface):
 
     async def check_for_payments(self, callback):
         headers = {'Accept': 'text/event-stream', 'x-api-key': self.invoice_key}
-        url = self.base_url + 'api/v1/payments/sse/'
+        url = self.base_url + 'api/v1/payments/sse'
         response = with_urllib3(url, headers)
         client = sseclient.SSEClient(response)
         for event in client.events():
+            if event.event == 'ping':
+                continue
             try:
+                print("data " + event.data)
                 payment = json.loads(event.data)
                 if not payment['pending']:
                     await callback(payment['payment_hash'])
 
             except Exception as e:
-                # print(e)
+                logging.error(e)
                 pass
 
     async def _post(self, endpoint, data, headers) -> any:
