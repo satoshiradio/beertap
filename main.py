@@ -25,7 +25,7 @@ async def run_tk(root, interval=0.05):
 async def main() -> None:
     logging.basicConfig(
         level=settings.LOGLEVEL,
-        format="%(asctime)s %(module)s %(levelname)s %(message)s",
+        format="%(asctime)s [%(module)s] %(levelname)s: %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
     app = App()

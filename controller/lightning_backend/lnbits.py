@@ -42,9 +42,9 @@ class LNBits(LightningBackendInterface):
             if event.event == 'ping':
                 continue
             try:
-                print("data " + event.data)
                 payment = json.loads(event.data)
                 if not payment['pending']:
+                    logging.info("Payment received")
                     await callback(payment['payment_hash'])
 
             except Exception as e:
