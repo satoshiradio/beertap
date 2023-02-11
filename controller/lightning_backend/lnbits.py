@@ -25,7 +25,7 @@ class LNBits(LightningBackendInterface):
 
     async def get_invoice(self, price: int) -> Invoice:
         endpoint = 'api/v1/payments'
-        data = {"out": False, "amount": price, "memo": 'LNBeerTAP', "unit": 'sat',
+        data = {"out": False, "amount": price, "memo": 'LNBeerTAP', "expiry": 86400, "unit": 'sat',
                 "internal": False}
         headers = {
             'X-Api-Key': self.invoice_key
@@ -38,6 +38,9 @@ class LNBits(LightningBackendInterface):
         headers = {'Accept': 'text/event-stream', 'x-api-key': self.invoice_key}
         url = self.base_url + 'api/v1/payments/sse'
         response = with_urllib3(url, headers)
+        if int(str(response.status)[:1]) != 2:
+            logging.error(f"SSE response code: {response.status}")
+            return
         client = sseclient.SSEClient(response)
         for event in client.events():
             logging.debug(f'Event: {event.data}')
