@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from time import perf_counter
 
 from gpiozero import LED, Device, OutputDevice
@@ -27,7 +28,7 @@ class GPIOActuator:
 
     async def pour(self) -> None:
         self.pin.on()
-        print("GPIO HIGH")
+        logging.info("GPIO HIGH")
         await asyncio.sleep(calculate_poor_time_in_seconds())
         self.pin.off()
-        print("GPIO LOW")
+        logging.info("GPIO LOW")

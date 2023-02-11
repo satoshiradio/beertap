@@ -1,3 +1,4 @@
+import logging
 import time
 from nfc import ContactlessFrontend
 from nfc.clf import RemoteTarget
@@ -18,7 +19,7 @@ class NfcController:
         self.stopped = False
         with ContactlessFrontend(NFC_PATH) as clf:
             while self.stopped == False:
-                print("NfcController.listen: start connecting to NFC.")
+                logging.info("NfcController.listen: start connecting to NFC.")
                 has_connected = clf.connect(rdwr={
                     'targets': NFC_TARGETS,
                     'on-discover': self.on_discover,
@@ -28,18 +29,18 @@ class NfcController:
                 })
 
                 print("NfcController.listen: done connecting to NFC. has connected:", has_connected)
-                print("Sleeping 60 seconds to avoid burning cpu on failure.")
+                logging.warning("Sleeping 60 seconds to avoid burning cpu on failure.")
                 time.sleep(60)
 
     def stop_listening(self):
         self.stopped = True
 
     def on_discover(self, target: RemoteTarget):
-        print("NfcController.on_discover:", target)
+        logging.info("NfcController.on_discover:", target)
         return True
 
     def on_connect(self, tag: Tag):
-        print("NfcController.on_connect:", tag)
+        logging.info("NfcController.on_connect:", tag)
 
         if tag.ndef is None:
             print("NfcController.on_connect: Tag is not NDEF.")
@@ -49,17 +50,17 @@ class NfcController:
         for record in records:
             lnurl = self.extract_lnurl_from_record(record)
             if lnurl is not None:
-                print("NfcController.on_connect: lnurl found:", lnurl)
+                logging.info("NfcController.on_connect: lnurl found:", lnurl)
                 self.lnurlw_controller.on_lnurlw(lnurl)
                 return True
 
-        print("NfcController.on_connect: No lnurl found.")
+        logging.info("NfcController.on_connect: No lnurl found.")
         # return True to make `clf.connect` wait until card is released.
         # return False to make `clf.connect` return immediately
         return True
 
     def on_release(self, tag: Tag):
-        print("NfcController.on_release: ", tag)
+        logging.info("NfcController.on_release: ", tag)
 
     def extract_lnurl_from_record(self, record: Record):
         if isinstance(record, UriRecord):
