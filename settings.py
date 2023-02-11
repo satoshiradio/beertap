@@ -16,6 +16,12 @@ TAP_TIME = env.int("TAP_TIME", default=0)
 PRICE_IN_EUROCENTS = env.int("PRICE_IN_EUROCENTS")
 
 LNBITS_BASE_URL = env.str("LNBITS_BASE_URL")
+# if LNBITS_BASE_URL_RAW.endswith('/'):
+#     LNBITS_BASE_URL = LNBITS_BASE_URL_RAW
+# else:
+#     LNBITS_BASE_URL = LNBITS_BASE_URL_RAW + '/'
+
+
 LNBITS_INVOICE_KEY = env.str("LNBITS_INVOICE_KEY")
 
 NFC_ENABLED = env.bool("NFC_ENABLED", default=False)

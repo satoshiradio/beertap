@@ -31,14 +31,16 @@ class LNBits(LightningBackendInterface):
             'X-Api-Key': self.invoice_key
         }
         data = await self._post(endpoint, data, headers)
+        logging.debug(data)
         return Invoice(**data)
 
-    async def check_for_payments(self, callback):
+    async def check_for_payments(self, callback) -> None:
         headers = {'Accept': 'text/event-stream', 'x-api-key': self.invoice_key}
         url = self.base_url + 'api/v1/payments/sse'
         response = with_urllib3(url, headers)
         client = sseclient.SSEClient(response)
         for event in client.events():
+            logging.debug(f'Event: {event.data}')
             if event.event == 'ping':
                 continue
             try:
@@ -53,16 +55,23 @@ class LNBits(LightningBackendInterface):
 
     async def _post(self, endpoint, data, headers) -> any:
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.base_url + endpoint, json=data, headers=headers) as response:
-                return await response.json()
+            try:
+                logging.debug(f"Posting to: {self.base_url + endpoint}")
+                async with session.post(self.base_url + endpoint, json=data, headers=headers) as response:
+                    if int(str(response.status)[:1]) == 2:
+                        return await response.json()
+                    else:
+                        logging.error(f'connection error: {response.status}')
+            except aiohttp.ClientConnectorError as e:
+                logging.error(e)
 
     async def get_price_in_sats(self, price) -> int:
         endpoint = 'api/v1/conversion'
         data = {
-              "from": "eur",
-              "amount": price,
-              "to": "sat"
-            }
+            "from": "eur",
+            "amount": price,
+            "to": "sat"
+        }
         headers = {}
         data = await self._post(endpoint, data, headers)
         return data['sats']
