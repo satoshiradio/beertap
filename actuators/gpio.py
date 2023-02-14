@@ -17,7 +17,7 @@ class GPIOActuator:
         if settings.EMULATE_GPIO:
             Device.pin_factory = MockFactory()
 
-        self.pin = OutputDevice(settings.GPIO_TAP_PIN, active_high=True, initial_value=False)
+        self.pin = OutputDevice(settings.GPIO_TAP_PIN, active_high=False, initial_value=False)
         self.event_channel = event_channel
         self.event_channel.subscribe('PAYMENT', self._on_payment)
         pass
