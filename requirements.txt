@@ -9,3 +9,4 @@ Pillow~=9.3.0
 lnurl~=0.3.6
 aiohttp~=3.8.3
 nfcpy==1.0.4
+python-telegram-handler==2.2.1
